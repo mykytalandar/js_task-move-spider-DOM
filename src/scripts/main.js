@@ -12,27 +12,25 @@ document.addEventListener('click', (e) => {
     return;
   }
 
-  const border = wall.clientTop;
+  const wallStyle = getComputedStyle(wall);
+  const borderTop = parseInt(wallStyle.borderTopWidth);
+  const borderLeft = parseInt(wallStyle.borderLeftWidth);
+
   const halfSpiderWidth = spiderSize.width / 2;
   const halfSpiderHeight = spiderSize.height / 2;
-  let positionX = e.clientX - wallSize.left - halfSpiderWidth - border;
-  let positionY = e.clientY - wallSize.top - halfSpiderHeight - border;
 
-  if (positionX < 0) {
-    positionX = 0;
-  }
+  let positionX = e.clientX - wallSize.left - halfSpiderWidth - borderLeft;
+  let positionY = e.clientY - wallSize.top - halfSpiderHeight - borderTop;
 
-  if (positionY < 0) {
-    positionY = 0;
-  }
+  positionX = Math.max(
+    0,
+    Math.min(positionX, wall.clientWidth - spiderSize.width),
+  );
 
-  if (positionX + spiderSize.width >= wallSize.width) {
-    positionX = wallSize.width - spiderSize.width - border * 2;
-  }
-
-  if (positionY + spiderSize.height >= wallSize.height) {
-    positionY = wallSize.height - spiderSize.height - border * 2;
-  }
+  positionY = Math.max(
+    0,
+    Math.min(positionY, wall.clientHeight - spiderSize.height),
+  );
 
   spider.style.left = `${positionX}px`;
   spider.style.top = `${positionY}px`;
